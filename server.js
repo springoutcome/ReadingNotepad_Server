@@ -101,7 +101,7 @@ rooter.route('/register')
                         });
                     else
                         res.json({
-                            errCode: 1000, 
+                            errCode: null, 
                             message: 'User created!'
                         }); 
                 });
@@ -134,7 +134,7 @@ rooter.route('/login')
                     if (hashed_password == encrypted_password)
                     {
                         res.json({
-                           errCode: 2000,
+                           errCode: null,
                            message: 'Login success'
                         });
                         console.log('Login success');
