@@ -85,16 +85,25 @@ rooter.route('/register')
         User.find({'email': email}).count(function(err, number) {
             if (number != 0)
             {
-                res.json('Email already exists');
+                res.json({
+                    errCode: 1010,
+                    message: 'Email already exists'
+                });
                 console.log('Email already exists');
             }
             else 
             {
                 user.save(function(err) {
                     if (err) 
-                        res.send(err);
+                        res.json({
+                            errCode: 1011,
+                            message: err
+                        });
                     else
-                        res.json({message: 'User created!'}); 
+                        res.json({
+                            errCode: 1000, 
+                            message: 'User created!'
+                        }); 
                 });
             }
         });
@@ -110,7 +119,10 @@ rooter.route('/login')
         User.find({'email': email}).count(function(err, number) {
             if (number == 0)
             {
-                res.json('Email not exists');
+                res.json({
+                    errCode: 2010,
+                    message: 'Email not exists'
+                });
                 console.log('Email not exists');
             }
             else 
@@ -121,11 +133,17 @@ rooter.route('/login')
                     var encrypted_password = user.password; // Get password from user
                     if (hashed_password == encrypted_password)
                     {
-                        res.json('Login success');
+                        res.json({
+                           errCode: 2000,
+                           message: 'Login success'
+                        });
                         console.log('Login success');
                     }
                     else {
-                        res.json('Wrong password');
+                        res.json({
+                            errCode: 2011,
+                            message: 'Wrong password' 
+                        });
                         console.log('Wrong password');
                     }
                 });
