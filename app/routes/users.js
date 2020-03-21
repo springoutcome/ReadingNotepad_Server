@@ -2,7 +2,7 @@ var express = require('express');
 var crypto = require('crypto');
 var router = express.Router();
 
-var User = require('./app/models/user');
+var User = require('../models/user');
 
 //PASSWORD ULTILS
 //CREATE FUNCTION TO RANDOM SALT
