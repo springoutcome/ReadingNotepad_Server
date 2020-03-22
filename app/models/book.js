@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var BookSchema = new Schema({
-    user_email: String,
+    user_id: String,
     date: String,
     title: {type: String, required: true},
     auther: String,
