@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var port = process.env.PORT || 3000;
 
 var users = require('./app/routes/users');
+var books = require('./app/routes/books');
 
 var mongoose = require('mongoose');
 
@@ -13,8 +14,8 @@ const connectOption = {
     useUnifiedTopology: true,
 };
 
-//mongoose.connect('mongodb://localhost/ReadingNotepad_Server', connectOption);
-mongoose.connect('mongodb://heroku_mmzl4bdb:6bsq28gaf3arclvmpc7dl5qioj@ds139920.mlab.com:39920/heroku_mmzl4bdb', connectOption);
+mongoose.connect('mongodb://localhost/ReadingNotepad_Server', connectOption);
+//mongoose.connect('mongodb://heroku_mmzl4bdb:6bsq28gaf3arclvmpc7dl5qioj@ds139920.mlab.com:39920/heroku_mmzl4bdb', connectOption);
 
 // postデータをjsonで取得できる
 app.use(bodyParser.urlencoded({extended: true}));
@@ -31,7 +32,7 @@ app.get('/', function(req, res) {
 });
 
 app.use('/users', users);
-
+app.use('/books', books);
 
 app.listen(port);
 console.log('listen on port ' + port);
