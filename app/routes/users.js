@@ -48,9 +48,16 @@ function checkHashPassword(userPassword, salt) {
 router.get('/', function(req, res) {
     User.find(function(err, users) {
         if (err)
-            res.send(err);
+            res.json({
+                error: true,
+                message: err
+            });
         else
-            res.json(users);
+            res.json({
+                error: false,
+                message: 'You got all user info!',
+                users: users
+            });
     });
 });
 
@@ -77,7 +84,7 @@ router.post('/register', function(req, res) {
         if (number != 0)
         {
             res.json({
-                errCode: 1010,
+                error: true,
                 message: 'Email already exists'
             });
             console.log('Email already exists');
@@ -87,12 +94,12 @@ router.post('/register', function(req, res) {
             user.save(function(err) {
                 if (err) 
                     res.json({
-                        errCode: 1011,
+                        error: true,
                         message: err
                     });
                 else
                     res.json({
-                        errCode: null, 
+                        error: false, 
                         message: 'User created!'
                     }); 
             });
@@ -111,7 +118,7 @@ router.post('/login', function(req, res) {
         if (number == 0)
         {
             res.json({
-                errCode: 2010,
+                error: true,
                 message: 'Email not exists'
             });
             console.log('Email not exists');
@@ -125,14 +132,14 @@ router.post('/login', function(req, res) {
                 if (hashed_password == encrypted_password)
                 {
                     res.json({
-                        errCode: null,
+                        error: false,
                         message: 'Login success'
                     });
                     console.log('Login success');
                 }
                 else {
                     res.json({
-                        errCode: 2011,
+                        error: true,
                         message: 'Wrong password' 
                     });
                     console.log('Wrong password');
@@ -146,8 +153,15 @@ router.post('/login', function(req, res) {
 router.get('/:user_id', function(req, res) {
     User.findById(req.params.user_id, function(err, user) {
         if (err)
-            res.send(err);
-        res.json(user);
+            res.json({
+                error: true,
+                message: err
+            });
+        res.json({
+            error: false,
+            message: 'You got specific user info!',
+            user: user
+        });
     });
 });
 
@@ -155,7 +169,10 @@ router.get('/:user_id', function(req, res) {
 router.put('/:user_id', function(req, res) {
     User.findById(req.params.user_id, function(err, user) {
         if (err)
-            res.send(err);
+            res.json({
+                error: true,
+                message: err
+            });
         var post_data = req.body;
         
         var plain_password = post_data.password;
@@ -176,7 +193,7 @@ router.put('/:user_id', function(req, res) {
             if (number != 0)
             {
                 res.json({
-                    errCode: 1010,
+                    error: true,
                     message: 'Email already exists'
                 });
                 console.log('Email already exists');
@@ -186,12 +203,12 @@ router.put('/:user_id', function(req, res) {
                 user.save(function(err) {
                     if (err) 
                         res.json({
-                            errCode: 1011,
+                            error: true,
                             message: err
                         });
                     else
                         res.json({
-                            errCode: null, 
+                            error: false, 
                             message: 'User updated!'
                         }); 
                 });
@@ -204,8 +221,14 @@ router.put('/:user_id', function(req, res) {
 router.delete('/:user_id', function(req, res) {
     User.remove({ _id: req.params.user_id }, function(err, user) {
         if (err)
-            res.send(err);
-        res.json({ message: 'Successfully deleted'});
+            res.json({
+                error: true,
+                message: err
+            });
+        res.json({ 
+            error: false,
+            message: 'Successfully deleted'}
+        );
     });
 });
 
