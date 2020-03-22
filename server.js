@@ -14,8 +14,8 @@ const connectOption = {
     useUnifiedTopology: true,
 };
 
-mongoose.connect('mongodb://localhost/ReadingNotepad_Server', connectOption);
-//mongoose.connect('mongodb://heroku_mmzl4bdb:6bsq28gaf3arclvmpc7dl5qioj@ds139920.mlab.com:39920/heroku_mmzl4bdb', connectOption);
+//mongoose.connect('mongodb://localhost/ReadingNotepad_Server', connectOption);
+mongoose.connect('mongodb://heroku_mmzl4bdb:6bsq28gaf3arclvmpc7dl5qioj@ds139920.mlab.com:39920/heroku_mmzl4bdb', connectOption);
 
 // postデータをjsonで取得できる
 app.use(bodyParser.urlencoded({extended: true}));
