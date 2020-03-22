@@ -1,25 +1,23 @@
 var express = require('express');
 var router = express.Router();
-var Date = require('date-utils');
+//var Date = require('date-utils');
 
 var Book = require('../models/book');
 
 var dateFormat = {
     _fmt : {
-        "yyyy": function(date) { return date.getFullYear() + ''; },
-        "MM": function(date) { return ('0' + (date.getMonth() + 1)).slice(-2); },
-        "dd": function(date) { return ('0' + date.getDate()).slice(-2); },
-        "hh": function(date) { return ('0' + date.getHours()).slice(-2); },
-        "mm": function(date) { return ('0' + date.getMinutes()).slice(-2); },
-        "ss": function(date) { return ('0' + date.getSeconds()).slice(-2); }
+      "yyyy": function(date) { return date.getFullYear() + ''; },
+      "MM": function(date) { return ('0' + (date.getMonth() + 1)).slice(-2); },
+      "dd": function(date) { return ('0' + date.getDate()).slice(-2); },
+      "hh": function(date) { return ('0' + date.getHours()).slice(-2); },
+      "mm": function(date) { return ('0' + date.getMinutes()).slice(-2); },
+      "ss": function(date) { return ('0' + date.getSeconds()).slice(-2); }
     },
     _priority : ["yyyy", "MM", "dd", "hh", "mm", "ss"],
-    format: function(date, format) {
-        return this._priority.reduce(function(res, fmt) {
-            res.replace(fmt, this._fmt[fmt](date), format);
-        });
+    format: function(date, format){
+      return this._priority.reduce((res, fmt) => res.replace(fmt, this._fmt[fmt](date)), format)
     }
-}
+};
 
 /* すべての書籍の取得 */
 router.get('/', function(req, res) {
@@ -42,7 +40,7 @@ router.get('/', function(req, res) {
 router.post('/register', function(req, res) {
     var post_data = req.body;
 
-    var user_email = post_data.user_email;
+    var user_id = post_data.user_id;
 
     var date = dateFormat.format(new Date(), 'yyyy/MM/dd hh:mm:ss');
 
@@ -53,7 +51,7 @@ router.post('/register', function(req, res) {
     var impression = post_data.impression;
 
     var book = new Book();
-    book.user_email = user_email;
+    book.user_id = user_id;
     book.date = date;
     book.title = title;
     book.auther = auther;
@@ -76,7 +74,7 @@ router.post('/register', function(req, res) {
 });
 
 /* 特定の書籍情報の取得 */
-router.get('/id/:book_id', function(req, res) {
+router.get('/book_id/:book_id', function(req, res) {
     Book.findById(req.params.book_id, function(err, book) {
         if (err)
             res.json({
@@ -92,8 +90,8 @@ router.get('/id/:book_id', function(req, res) {
 });
 
 /* 特定の書籍情報の取得 */
-router.get('/email/:user_email', function(req, res) {
-    Book.find(req.params.user_email).count(function(err, number) {
+router.get('/user_id/:user_id', function(req, res) {
+    Book.find({user_id: req.params.user_id}).count(function(err, number) {
         if (number == 0) {
             res.json({
                 error: true,
@@ -101,7 +99,7 @@ router.get('/email/:user_email', function(req, res) {
             });
         }
         else {
-            Book.find({user_email: user_email}, function(err, books) {
+            Book.find({user_id: req.params.user_id}, function(err, books) {
                 res.json({
                    error: false,
                    message: 'You got spacific books info!',
